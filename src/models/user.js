@@ -1,10 +1,9 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const connection = require('../config/db');
 
 const createUser = async (name, password) => {
   const hashedPassword = await bcrypt.hash(password, 12);
-  const query = 'INSERT INTO user (userName, userPwd) VALUES (?, ?)';
+  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
   return new Promise((resolve, reject) => {
     connection.query(query, [name, password], (err, results) => {
       if (err) {
@@ -16,7 +15,7 @@ const createUser = async (name, password) => {
 };
 
 const findUserByName = (name) => {
-  const query = 'SELECT * FROM user WHERE userName = ?';
+  const query = 'SELECT * FROM users WHERE username = ?';
   return new Promise((resolve, reject) => {
     connection.query(query, [name], (err, results) => {
       if (err) {

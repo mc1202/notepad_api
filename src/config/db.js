@@ -5,6 +5,7 @@ var connection = mysql.createConnection({
   port:process.env.DB_PORT,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  timezone:'+08:00'
 })
 connection.connect(err => {
   if (err) {

@@ -10,10 +10,11 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRoutes = require('./routes/auth');
+const billRoutes = require('./routes/bill');
 
 
 const corsOptions = {
-  origin:'http://localhost:3001',
+  origin:'http://192.168.0.102:9000',
   methods:'GET,POST',
   credentials: true, // 允许携带凭证（cookies）
   optionsSuccessStatus: 204,
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth',authRoutes)
+app.use('/bill',billRoutes)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
