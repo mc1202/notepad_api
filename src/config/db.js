@@ -7,6 +7,7 @@ var connection = mysql.createConnection({
   database: process.env.DB_NAME,
   timezone:'+08:00'
 })
+console.log(process.env.DB_PASSWORD)
 connection.connect(err => {
   if (err) {
     console.error('Error connecting to the database:', err.stack);
