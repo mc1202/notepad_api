@@ -28,12 +28,6 @@ const config = {
   },
 };
 
-module.exports = {
-  jwtSecret: process.env.JWT_SECRET || '',
-  db: {
-    host: process.env.DB_HOST || '',
-    user: process.env.DB_USER || '',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || '',
-  },
-};
+const currentEnv = process.env.NODE_ENV || 'development';
+
+module.exports = config[currentEnv];
