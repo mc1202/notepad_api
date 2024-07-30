@@ -1,5 +1,5 @@
 const { sendSuccess, sendError } = require('../utils/responseHelper');
-const { getType,insertBill,querytBill } = require('../models/bill')
+const { getType,insertBill,querytBill } = require('../queries/bill')
 const { groupBillsByDate } = require('../utils/index')
 const getBillType = async (req, res) => {
   try {

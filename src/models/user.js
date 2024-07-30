@@ -1,36 +1,36 @@
-const bcrypt = require('bcrypt');
-const connection = require('../config/db');
+'use strict';
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database'); // 导入 Sequelize 实例
 
-const createUser = async (name, password) => {
-  const hashedPassword = await bcrypt.hash(password, 12);
-  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-  return new Promise((resolve, reject) => {
-    connection.query(query, [name, password], (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results.insertId);
-    });
-  });
-};
+class User extends Model {}
 
-const findUserByName = (name) => {
-  const query = 'SELECT * FROM users WHERE username = ?';
-  return new Promise((resolve, reject) => {
-    connection.query(query, [name], (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results[0]);
-    });
-  });
-};
+User.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+    defaultValue: 1003, // 设置初始值
+  },
+  // 其他字段
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+  },
+}, {
+  sequelize,
+  modelName: 'User',
+  tableName: 'users',
+  timestamps: false, // 如果你不使用自动生成的时间戳
+});
 
-
-
-
-
-module.exports = {
-  createUser,
-  findUserByName
-};
+module.exports = User;

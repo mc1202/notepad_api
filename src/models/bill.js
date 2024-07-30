@@ -1,55 +1,64 @@
-const connection = require('../config/db');
+'use strict';
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database'); // 导入 Sequelize 实例
+const User = require('./user');
+const BillType = require('./bill_type');
 
-const getType = async () => {
-  const query = 'SElECT * from bill_types';
-  return new Promise((resolve, reject) => {
-    connection.query(query, [], (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results);
-    });
-  });
-};
+class Bill extends Model {}
 
-const insertBill = async (form) => {
-  const { is_income, bill_type_id,total,title,user } = form
-  const query = 'INSERT INTO bills (is_income, bill_type_id,total,user_id,title) values (?,?,?,?,?)';
-  return new Promise((resolve, reject) => {
-    connection.query(query, [is_income, bill_type_id,total,user.id,title], (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results);
-    });
-  });
-};
+Bill.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  bill_type_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: BillType,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  total: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  remarks: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  is_income: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+}, {
+  sequelize,
+  modelName: 'Bill',
+  tableName: 'bills',
+  timestamps: false,
+});
 
-const querytBill = async ({year,month,user}) => {
-  console.log(year)
-  let query = 'select bills.*,bill_types.name AS bill_type from bills join bill_types on bills.bill_type_id = bill_types.id where user_id = ?';
-  let params = [user.id]
-  if (year) {
-      query += ' and year(created_at) = ?'
-      params.push(year)
-      if (month) {
-          query += ' and month(created_at) = ?'
-          params.push(month)
-      }
-  }
-  console.log(query,params)
-  return new Promise((resolve, reject) => {
-    connection.query(query, params, (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results);
-    });
-  });
-};
-
-module.exports = {
-    getType,
-    insertBill,
-    querytBill
-}
+module.exports = Bill;

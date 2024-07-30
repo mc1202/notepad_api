@@ -1,33 +1,37 @@
+
+
 const dotenv = require('dotenv');
 
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: '.env.production' });
-} else {
-  dotenv.config({ path: '.env.development' });
-}
+// Load environment variables based on the NODE_ENV
+const env = process.env.NODE_ENV || 'development';
+const envFile = `.env.${env}`;
 
-const config = {
+dotenv.config({ path: envFile });
+
+module.exports = {
   development: {
-    jwtSecret: process.env.JWT_SECRET || '',
-    db: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    timezone:process.env.DB_TIMEZONE,
+    dialect: 'mysql',
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
     },
-    port: process.env.PORT || 3000,
   },
   production: {
-    db: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    timezone:process.env.DB_TIMEZONE,
+    dialect: 'mysql',
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
     },
-    port: process.env.PORT || 8000,
   },
 };
-
-const currentEnv = process.env.NODE_ENV || 'development';
-
-module.exports = config[currentEnv];

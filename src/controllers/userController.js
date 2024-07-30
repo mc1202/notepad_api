@@ -1,4 +1,4 @@
-const { findUserByName, createUser } = require('../models/user');
+const { findUserByName, createUser } = require('../queries/user');
 const { generateToken } = require('../utils/jwt');
 const bcrypt = require('bcrypt')
 const { sendSuccess, sendError } = require('../utils/responseHelper');
