@@ -4,7 +4,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
-// require('dotenv').config({ path: '.env.development' });
+const dotenv = require('dotenv');
+
+const env = process.env.NODE_ENV || 'development';
+const envFile = `.env.${env}`;
+
+dotenv.config({ path: envFile });
 
 
 const indexRouter = require('./routes/index');
