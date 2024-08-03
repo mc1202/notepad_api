@@ -15,7 +15,11 @@ BillType.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  // 可以添加更多字段
+  is_income: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
 }, {
   sequelize,
   modelName: 'BillType',

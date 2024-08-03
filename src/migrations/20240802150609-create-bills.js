@@ -3,6 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    console.log(Sequelize.NOW)
     await queryInterface.createTable('bills', {
         id: {
           type: Sequelize.INTEGER,
@@ -44,10 +45,12 @@ module.exports = {
           defaultValue: 0,
         },
         created_at: {
+          allowNull: false,
           type: Sequelize.DATE,
           defaultValue: Sequelize.NOW,
         },
         updated_at: {
+          allowNull: false,
           type: Sequelize.DATE,
           defaultValue: Sequelize.NOW,
         },

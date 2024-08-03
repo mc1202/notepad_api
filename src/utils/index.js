@@ -29,6 +29,7 @@ const getDayOfWeek = (dateString) => {
 }
 
 const groupBillsByDate = (arr) => {
+    // console.log(arr)
     let bills = []
     bills = arr.map(item => {
         item.date = getCurrentDate('MM月dd日',item.created_at)

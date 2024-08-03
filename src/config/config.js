@@ -2,12 +2,11 @@
 
 const dotenv = require('dotenv');
 
-// Load environment variables based on the NODE_ENV
 const env = process.env.NODE_ENV || 'development';
 const envFile = `.env.${env}`;
 
 dotenv.config({ path: envFile });
-
+console.log(process.env.DB_PASSWORD)
 module.exports = {
   development: {
     username: process.env.DB_USER,

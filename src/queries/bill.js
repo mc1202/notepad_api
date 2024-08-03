@@ -25,8 +25,8 @@ const insertBill = async (form) => {
   });
 };
 
-const querytBill = async ({year,month,user}) => {
-  console.log(year)
+const querytBill = async ({year,month,week,user}) => {
+  console.log(year,month)
   let query = 'select bills.*,bill_types.name AS bill_type from bills join bill_types on bills.bill_type_id = bill_types.id where user_id = ?';
   let params = [user.id]
   if (year) {
@@ -48,8 +48,38 @@ const querytBill = async ({year,month,user}) => {
   });
 };
 
+const queryBillsByDateType = async ({is_income,dateType,user}) => {
+  let query = `select bills.*,bill_types.name AS bill_type FROM bills join bill_types on bills.bill_type_id = bill_types.id where user_id = ${user.id} and bills.is_income = ${is_income} `;
+  if (dateType == 'week') {
+    query += `and yearweek(created_at, 1) = yearweek(curdate(), 1)`
+  } else if (dateType == 'month') {
+    query += `and year(created_at) = year(curdate()) and month(created_at) = month(curdate())`
+  } else {
+    query += 'and year(created_at) = year(curdate())'
+  }
+  // let params = [user.id]
+  // if (year) {
+  //     query += ' and year(created_at) = ?'
+  //     params.push(year)
+  //     if (month) {
+  //         query += ' and month(created_at) = ?'
+  //         params.push(month)
+  //     }
+  // }
+  // console.log(query,params)
+  return new Promise((resolve, reject) => {
+    connection.query(query, [], (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(results);
+    });
+  });
+};
+
 module.exports = {
     getType,
     insertBill,
-    querytBill
+    querytBill,
+    queryBillsByDateType
 }

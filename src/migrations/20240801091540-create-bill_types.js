@@ -14,6 +14,11 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
+        is_income: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
     });
   },
 

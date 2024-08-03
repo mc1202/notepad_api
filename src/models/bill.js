@@ -47,10 +47,12 @@ Bill.init({
     defaultValue: 0,
   },
   created_at: {
+    allowNull: false,
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
   updated_at: {
+    allowNull: false,
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
@@ -58,7 +60,9 @@ Bill.init({
   sequelize,
   modelName: 'Bill',
   tableName: 'bills',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 module.exports = Bill;
