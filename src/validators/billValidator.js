@@ -6,7 +6,7 @@ const validateAddBill = () => {
   return [
     body('bill_type_id').isInt().isLength({ min:1, max: 1 }).withMessage('账单类型错误'),
     body('is_income').isInt([0, 1]).withMessage('账单类别错误'),
-    body('total').isInt().withMessage('金额错误'),
+    body('total').isDecimal().withMessage('金额错误'),
     body('title').isString().withMessage('缺少标题')
   ];
 };

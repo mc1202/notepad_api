@@ -1,5 +1,5 @@
 const { sendSuccess, sendError } = require('../utils/responseHelper');
-const { getType,insertBill,querytBill,queryBillsByDateType } = require('../queries/bill')
+const { getType,insertBill,modifyBill,querytBill,querytBillDetail,queryBillsByDateType } = require('../queries/bill')
 const { groupBillsByDate } = require('../utils/index')
 const getBillType = async (req, res) => {
   try {
@@ -24,6 +24,19 @@ const addBill = async (req, res) => {
   }
 }
 
+const updateBill = async (req, res) => {
+//   console.log(req.user)
+//   const { is_income, bill_type_id,total } = req.body
+//   console.log(req.body)
+  try {
+    await modifyBill({...req.body});
+    sendSuccess(res,null,'修改成功')
+  } catch (error) {
+    console.log(error)
+    sendError(res,null,'Internal server error',500)
+  }
+}
+
 const getBill = async (req,res) => {
     const {year,month,week} = req.body
     const formattedMonth = month ? parseInt(month, 10) : null;
@@ -37,6 +50,17 @@ const getBill = async (req,res) => {
        total_expense += parseFloat(bill.total_expense);
     });
     sendSuccess(res,{total_income,total_expense,record:array},'查询成功')
+  } catch (error) {
+    console.log(error)
+    sendError(res,null,'Internal server error',500)
+  }
+}
+
+const getBillDetail = async (req,res) => {
+    try {
+    const obj = (await querytBillDetail({...req.body,user:req.user}))[0];
+    // const obj = array[0]
+    sendSuccess(res,{...obj},'查询成功')
   } catch (error) {
     console.log(error)
     sendError(res,null,'Internal server error',500)
@@ -69,5 +93,7 @@ module.exports = {
     getBillType,
     addBill,
     getBill,
-    getBillsByDateType
+    getBillDetail,
+    getBillsByDateType,
+    updateBill
 }

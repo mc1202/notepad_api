@@ -14,9 +14,27 @@ const getType = async () => {
 
 const insertBill = async (form) => {
   const { is_income, bill_type_id,total,title,user } = form
-  const query = 'INSERT INTO bills (is_income, bill_type_id,total,user_id,title) values (?,?,?,?,?)';
+  const query = 'INSERT INTO bills (is_income, bill_type_id,total,user_id,title) values (?,?,?,?,?) where id = ';
   return new Promise((resolve, reject) => {
     connection.query(query, [is_income, bill_type_id,total,user.id,title], (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(results);
+    });
+  });
+};
+
+const modifyBill = async (form) => {
+  const { id,...obj} = form
+  const keys = Object.keys(obj)
+  const values = Object.values(obj)
+  const setClause =keys.map(key => `${key} = ?`).join(',')
+
+  const query = `update bills set ${setClause} where id = ? `;
+  values.push(id)
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, results) => {
       if (err) {
         return reject(err);
       }
@@ -40,6 +58,19 @@ const querytBill = async ({year,month,week,user}) => {
   console.log(query,params)
   return new Promise((resolve, reject) => {
     connection.query(query, params, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(results);
+    });
+  });
+};
+
+const querytBillDetail = async ({id,user}) => {
+  let query = `select * from bills where user_id = ${user.id} and id = ${id}`;
+  // console.log(query,params)
+  return new Promise((resolve, reject) => {
+    connection.query(query, [], (err, results) => {
       if (err) {
         return reject(err);
       }
@@ -80,6 +111,8 @@ const queryBillsByDateType = async ({is_income,dateType,user}) => {
 module.exports = {
     getType,
     insertBill,
+    modifyBill,
     querytBill,
+    querytBillDetail,
     queryBillsByDateType
 }
