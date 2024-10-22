@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const logger = require('../logger');
 const cors = require('cors')
 const dotenv = require('dotenv');
 
@@ -19,7 +19,7 @@ const billRoutes = require('./routes/bill');
 
 
 const corsOptions = {
-  origin:'http://192.168.0.102:9000',
+  origin:'http://192.168.0.104:9000',
   methods:'GET,POST',
   credentials: true, // 允许携带凭证（cookies）
   optionsSuccessStatus: 204,
@@ -33,7 +33,7 @@ app.use(cors(corsOptions))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(require('morgan')('combined', { stream: { write: message => logger.info(message.trim()) } }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+  logger.error(err.message);
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 

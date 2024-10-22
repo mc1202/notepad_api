@@ -3,7 +3,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    console.log(Sequelize.NOW)
     await queryInterface.createTable('bills', {
         id: {
           type: Sequelize.INTEGER,
@@ -47,22 +46,17 @@ module.exports = {
         created_at: {
           allowNull: false,
           type: Sequelize.DATE,
-          defaultValue: Sequelize.NOW,
+          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),  // 使用数据库的 CURRENT_TIMESTAMP
         },
         updated_at: {
           allowNull: false,
           type: Sequelize.DATE,
-          defaultValue: Sequelize.NOW,
+          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
         },
     });
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable('bills');
   }
 };

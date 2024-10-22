@@ -14,7 +14,7 @@ const getType = async () => {
 
 const insertBill = async (form) => {
   const { is_income, bill_type_id,total,title,user } = form
-  const query = 'INSERT INTO bills (is_income, bill_type_id,total,user_id,title) values (?,?,?,?,?) where id = ';
+  const query = 'INSERT INTO bills (is_income, bill_type_id,total,user_id,title) values (?,?,?,?,?)';
   return new Promise((resolve, reject) => {
     connection.query(query, [is_income, bill_type_id,total,user.id,title], (err, results) => {
       if (err) {
